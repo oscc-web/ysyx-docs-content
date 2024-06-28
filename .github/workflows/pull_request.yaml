@@ -1,0 +1,50 @@
+name: Build YSYX Docs
+
+on:
+  workflow_dispatch: # Allows manual triggering of the workflow
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout ysyx-docs-content
+      uses: actions/checkout@v4
+      with:
+        repository: oscc-web/ysyx-docs-content
+        path: ysyx-docs-content
+
+    - name: Checkout ysyx-docs
+      uses: actions/checkout@v4
+      with:
+        repository: oscc-web/ysyx-docs
+        path: ysyx-docs
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: ysyx-docs/package*.json
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.10' 
+        cache: 'pip' # caching pip dependencies
+
+    - name: Install Dependencies
+      working-directory: ysyx-docs
+      run: |
+        npm ci
+        pip install -r requirements.txt
+
+    # Pull content from the local git repo then build the docs
+    - name: Test doc building
+      working-directory: ysyx-docs
+      run: |
+        python3 ./pull_content.py --local ${{ github.workspace }}/ysyx-docs-content --map zh:docs --map en:i18n/en/docusaurus-plugin-content-docs/current
+        npm run build
