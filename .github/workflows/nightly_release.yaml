@@ -16,7 +16,7 @@ jobs:
 
       - name: Create GitHub Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.YSYX_DOCS_CONTENT_TOKEN }}
           RELEASE_TAG: ${{ env.RELEASE_TAG }}
         run: |
           curl -L \
