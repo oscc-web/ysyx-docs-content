@@ -33,7 +33,11 @@ jobs:
               "draft": false,
               "prerelease": false,
               "generate_release_notes": true
-            }'
+            }' 
+      - name: Create latest GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.YSYX_DOCS_CONTENT_TOKEN }}
+          RELEASE_TAG: ${{ env.RELEASE_TAG }}
         run: |
           curl -L \
             -X POST \
