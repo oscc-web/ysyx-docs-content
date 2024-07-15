@@ -34,7 +34,6 @@ jobs:
     - name: Install Dependencies
       working-directory: ysyx-docs
       run: |
-        cd ysyx-docs
         npm ci
 
     - name: Test doc building
