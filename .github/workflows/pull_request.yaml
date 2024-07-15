@@ -1,0 +1,41 @@
+name: Build YSYX Docs
+
+on:
+  workflow_dispatch: # Allows manual triggering of the workflow
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout ysyx-docs
+      uses: actions/checkout@v4
+      with:
+        repository: oscc-web/ysyx-docs-content
+        path: ysyx-docs-content
+
+    - name: Checkout ysyx-docs
+      uses: actions/checkout@v4
+      with:
+        repository: oscc-web/ysyx-docs
+        path: ysyx-docs
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '16'
+        cache: 'npm'
+        cache-dependency-path: 
+          - ysyx-docs/package-lock.json
+          - ysyx-docs/package.json
+
+    - name: Install Dependencies
+      run: |
+        cd ysyx-docs
+        npm ci
+
+    # Add additional steps here as needed, e.g., building the docs
