@@ -27,13 +27,17 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '16'
+        node-version: '18'
         cache: 'npm'
         cache-dependency-path: ysyx-docs/package*.json
 
     - name: Install Dependencies
+      working-directory: ysyx-docs
       run: |
         cd ysyx-docs
         npm ci
 
-    # Add additional steps here as needed, e.g., building the docs
+    - name: Test doc building
+      working-directory: ysyx-docs
+      run: |
+        npm run build
