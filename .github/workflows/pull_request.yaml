@@ -12,11 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout ysyx-docs
+    - name: Checkout ysyx-docs-content
       uses: actions/checkout@v4
       with:
         repository: oscc-web/ysyx-docs-content
         path: ysyx-docs-content
+
+    - name: Get changed files in the ysyx-docs-content repo
+      id: changed-files
+      uses: tj-actions/changed-files@v44
 
     - name: Checkout ysyx-docs
       uses: actions/checkout@v4
@@ -35,6 +39,14 @@ jobs:
       working-directory: ysyx-docs
       run: |
         npm ci
+
+    - name: List all changed files
+      env:
+        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+      run: |
+        for file in ${ALL_CHANGED_FILES}; do
+          echo "$file was changed"
+        done
 
     - name: Test doc building
       working-directory: ysyx-docs
