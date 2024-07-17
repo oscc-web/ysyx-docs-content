@@ -42,6 +42,7 @@ jobs:
         npm ci
         pip install -r requirements.txt
 
+    # Pull content from the local git repo then build the docs
     - name: Test doc building
       working-directory: ysyx-docs
       run: |
