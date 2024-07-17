@@ -94,3 +94,91 @@ export default function Highlight({children, color}) {
 ```
 
 按照这些指南操作，您可以确保从 VuePress 到 Docusaurus 的平滑过渡，同时保持一致的格式，并利用 Docusaurus 的特定功能。
+
+## 如何贡献到此仓库
+
+### 仓库地址
+
+[ysyx-docs-content](https://github.com/oscc-web/ysyx-docs-content)
+
+### 分叉仓库
+
+1. 进入仓库主页。
+2. 点击右上角的“Fork”按钮。
+3. 选择您的账户作为分叉的目标。
+
+### 设置本地环境
+
+1. 克隆您分叉的仓库：
+   ```bash
+   git clone https://github.com/your-username/ysyx-docs-content.git
+   cd ysyx-docs-content
+   ```
+
+2. 添加原始仓库为远程仓库，以便保持同步：
+   ```bash
+   git remote add upstream https://github.com/oscc-web/ysyx-docs-content.git
+   ```
+
+### 创建开发分支
+
+1. 创建并切换到一个新的分支，用于您的功能或修复：
+   ```bash
+   git checkout -b dev-your-feature-name
+   ```
+
+### 开发更改
+
+1. 在 `dev-your-feature-name` 分支上进行开发。
+2. 定期提交更改，提交信息要描述清楚：
+   ```bash
+   git add .
+   git commit -m "描述您的更改"
+   ```
+
+### 准备提交更改
+
+1. 获取上游仓库的最新更改：
+   ```bash
+   git fetch upstream
+   ```
+
+2. 在最新的主分支上变基您的开发分支：
+   ```bash
+   git checkout dev-your-feature-name
+   git rebase upstream/main
+   ```
+
+3. 将您的提交压缩成一个提交：
+   ```bash
+   git rebase -i HEAD~<要压缩的提交数>
+   ```
+   在交互式变基中，将除第一个提交外的所有提交标记为“squash”。
+
+4. 强制推送您的更改到您的分叉仓库：
+   ```bash
+   git push -f origin dev-your-feature-name
+   ```
+
+### 提交拉取请求
+
+1. 进入原始仓库的GitHub页面。
+2. 点击“Pull requests”然后点击“New pull request”。
+3. 选择“compare across forks”并选择您的分叉和分支。
+4. 点击“Create pull request”。
+
+### 处理审查和CI要求
+
+1. 确保所需的状态检查“L0”通过。
+2. 等待至少一个代码所有者的批准审查。
+3. 处理审查员的任何评论或请求的更改。
+4. 在合并之前解决所有审查线程。
+
+### 其他注意事项
+
+- 仓库要求线性历史，因此避免合并提交。
+- 所有拉取请求都需要代码所有者的审查。
+- 确保在合并之前解决所有讨论线程。
+- 主分支不允许直接推送，因此始终在单独的分支上工作并提交拉取请求。
+
+按照这些步骤，您将能够在遵守分支保护规则的同时，为此仓库做出贡献，并保持清晰的线性历史。
