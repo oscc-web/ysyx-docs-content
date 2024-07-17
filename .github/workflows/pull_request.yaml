@@ -21,6 +21,9 @@ jobs:
     - name: Get changed files in the ysyx-docs-content repo
       id: changed-files
       uses: tj-actions/changed-files@v44
+      with:
+        since_last_remote_commit: true 
+        path: ysyx-docs-content
 
     - name: Checkout ysyx-docs
       uses: actions/checkout@v4
