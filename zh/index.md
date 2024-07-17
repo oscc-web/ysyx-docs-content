@@ -1,5 +1,6 @@
 ---
 slug: /
+sidebar_position: 1
 ---
 
 # 第六期"一生一芯"课程主页
