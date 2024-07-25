@@ -146,8 +146,25 @@ export default function Highlight({children, color}) {
 2. 在最新的主分支上变基您的开发分支：
    ```bash
    git checkout dev-your-feature-name
-   git rebase upstream/main
+   git pull --rebase
    ```
+
+> **为什么要使用rebase**  
+> 使用 git pull --rebase 可以帮助我们保持线性的 Git 历史记录，这是因为它会将本地的提交应用在从远程仓库拉取的最新提交之上，而不> 是创建一个新的合并提交。这种方法有助于保持提交历史的整洁和线性，便于阅读和理解。
+> 使用 git pull --rebase 的优点
+> 1. 保持线性历史记录
+> 通过避免合并提交，git pull --rebase 确保所有提交都在一条直线上，这使得历史记录更加简洁清晰。
+> 2. 提高代码审查效率
+> 线性的提交历史使得代码审查变得更加容易。审查者可以更清晰地看到每个提交的变化，而不必处理复杂的合并提交。
+> 3. 减少冲突
+> 由于 git pull --rebase 会将本地提交重新应用在最新的远程提交之上，冲突通常会在本地解决，而不是在合并时。这样可以减少冲突的频率和复杂度。
+> 4. 提高协作效率
+> 当多个开发人员协作时，线性的历史记录使得每个人都能更容易地理解项目的进展和变化。这有助于团队成员更有效地协作。
+> 5. 清晰的提交历史
+> 线性的提交历史更容易追踪和理解每个功能或修复是如何引入的。这对于调试和回溯问题非常有帮助。
+> 6. 避免冗余的合并提交
+> 使用 git pull --rebase 可以避免产生大量的合并提交，这些合并提交通常是冗余的，并且会使历史记录变得混乱。
+> 总的来说，使用 git pull --rebase 可以帮助团队保持一个清晰、整洁的提交历史，从而提高协作效率和代码质量。
 
 3. 将您的提交压缩成一个提交：
    ```bash
@@ -157,7 +174,7 @@ export default function Highlight({children, color}) {
 
 4. 强制推送您的更改到您的分叉仓库：
    ```bash
-   git push -f origin dev-your-feature-name
+   git push -f fork dev-your-feature-name
    ```
 
 ### 提交拉取请求
