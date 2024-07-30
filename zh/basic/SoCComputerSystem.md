@@ -192,7 +192,7 @@ index dd84776c..758fb8d1 100644
 :::todo[接入ysyxSoC]
 依次按照以下步骤将NPC接入ysyxSoC:
 1. 依照`ysyxSoC/spec/cpu-interface.md`中的`master`总线, 将之前实现的AXI4Lite协议扩展到完整的AXI4
-2. 调整NPC顶层接口, 使其与`ysyxSoC/spec/cpu-interface.md`中的接口命名规范<font color=red>**完全一致**</font>,
+2. 调整NPC顶层接口, 使其与`ysyxSoC/spec/cpu-interface.md`中的接口命名规范<Highlight color="#FF0000">**完全一致**</Highlight>,
    包括信号方向, 命名和数据位宽
    * 对于不使用的顶层输出端口, 需要将其赋值为常数`0`
    * 对于不使用的顶层输入端口, 悬空即可
