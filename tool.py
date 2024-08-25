@@ -4,6 +4,7 @@ import argparse
 def transform_markdown(markdown: str) -> str:
     # Define a mapping from original keywords to new formats
     mapping = {
+        'hint' : 'tip',
         'flag': 'tip',
         'comment': 'info',
         'question': 'info',
