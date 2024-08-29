@@ -1,5 +1,6 @@
-<!-- ## Linux系统安装和基本使用 -->
-
+---
+sidebar_position: 2
+---
 ## Linux system installation and basic usage
 
 <!-- > #### todo:: 安装一个Linux操作系统
