@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 8
 ---
 
 # SoC计算机系统
@@ -63,7 +63,7 @@ TODO: 加个总线和设备的框图
 :::
 
 <!-- -->
-:::todo[获取ysyxSoC的代码]
+:::warning[获取ysyxSoC的代码]
 你需要克隆[ysyxSoC](https://github.com/OSCPU/ysyxSoC)项目:
 ```bash
 cd ysyx-workbench
@@ -174,7 +174,7 @@ index dd84776c..758fb8d1 100644
 有了`arsize`/`awsize`信号, 设备就可以得知软件需要访问的实际数据位宽,
 从而在若干设备寄存器的地址紧密排布时, 亦可仅访问其中的某个寄存器, 避免意外改变设备的状态.
 
-:::todo[生成ysyxSoC的Verilog代码]
+:::warning[生成ysyxSoC的Verilog代码]
 首先你需要进行一些配置和初始化工作:
 1. 根据[mill的文档介绍][mill doc]安装mill
    * 可通过`mill --version`检查安装是否成功;
@@ -189,7 +189,7 @@ index dd84776c..758fb8d1 100644
 
 [mill doc]: https://mill-build.com/mill/Intro_to_Mill.html
 
-:::todo[接入ysyxSoC]
+:::warning[接入ysyxSoC]
 依次按照以下步骤将NPC接入ysyxSoC:
 1. 依照`ysyxSoC/spec/cpu-interface.md`中的`master`总线, 将之前实现的AXI4Lite协议扩展到完整的AXI4
 2. 调整NPC顶层接口, 使其与`ysyxSoC/spec/cpu-interface.md`中的接口命名规范<Highlight color="#FF0000">**完全一致**</Highlight>,
@@ -260,7 +260,7 @@ ROM的实现有很多种, 总体上都是通过某种方式来将信息(在这�
 但MROM作为ysyxSoC中的第一个简单的非易失存储器来存放程序, 对我们测试ysyxSoC的接入还是非常合适的.
 我们已经在ysyxSoC中添加了一个AXI4接口的MROM控制器, 其地址空间是`0x2000_0000~0x2000_0fff`.
 
-:::todo[测试MROM的访问]
+:::warning[测试MROM的访问]
 修改NPC的复位PC值, 使其从MROM中取出第一条指令,
 并修改`mrom_read()`函数, 使其总是返回一条`ebreak`指令.
 如果你的实现正确, NPC取到的第一条指令即是`ebreak`指令, 从而结束仿真.
@@ -289,7 +289,7 @@ void _start() {
 }
 ```
 
-:::todo[在ysyxSoC中输出第一个字符]
+:::warning[在ysyxSoC中输出第一个字符]
 你需要:
 1. 根据ysyxSoC中的设备地址空间约定, 以及UART手册(在`ysyxSoC/perip/`下的相关子目录中)中输出寄存器的地址,
    来填写上述C代码中的`?`处, 使代码可以正确访问输出寄存器来输出一个字符
@@ -305,7 +305,7 @@ Hint: 如果你不知道如何通过`gcc`和`objcopy`命令实现上述功能,
 :::
 
 <!-- -->
-:::hint[RTFM理解总线协议]
+:::tip[RTFM理解总线协议]
 如果你发现仿真过程中发现总线的行为难以理解, 先尝试RTFM尽可能理解手册中的所有细节.
 随着项目复杂度的增加, 你将要为不仔细RTFM付出越来越大的代价.
 :::
@@ -324,7 +324,7 @@ Hint: 如果你不知道如何通过`gcc`和`objcopy`命令实现上述功能,
 但作为前期测试, 这可以方便我们快速检查字符是否被正确写入串口发送队列.
 我们将在成功运行足够多程序后, 再添加除数的设置, 使得代码可以在真实的硬件场景中工作.
 
-:::todo[去掉换行也能输出]
+:::warning[去掉换行也能输出]
 上述`char-test`在输出字符`A`之后, 还输出一个换行符.
 尝试仅仅输出字符`A`而不输出换行符, 你应该会观察到仿真过程连字符`A`都不输出了.
 但如果每次输出一个字符之后都紧接着输出一个换行符, 打印出的信息将很难阅读.
@@ -377,7 +377,7 @@ SRAM能够使用与处理器制造相同的工艺进行生产, 同时读写延�
 1. 程序中不能包含对全局变量的写入操作
 1. 栈区需要分配在可写的SRAM中
 
-:::todo[为ysyxSoC添加AM运行时环境]
+:::warning[为ysyxSoC添加AM运行时环境]
 添加一个`riscv32e-ysyxsoc`的新AM, 并按照上述方式提供TRM的API.
 添加后, 将`cpu-tests`中的`dummy`测试编译到`riscv32e-ysyxsoc`,
 并尝试在ysyxSoC的仿真环境中运行它.
@@ -387,13 +387,13 @@ Hint: 为了完成这个任务, 你需要一些链接的知识.
 :::
 
 <!-- -->
-:::option[无法运行的测试]
+:::info[无法运行的测试]
 尝试在ysyxSoC中运行`cpu-tests`中的`fib`, 你将发现运行失败.
 尝试阅读提示信息, 你觉得应该如何解决这个问题?
 :::
 
 <!-- -->
-:::todo[重新添加DiffTest]
+:::warning[重新添加DiffTest]
 我们新增了MROM和SRAM, 接下来一段时间我们都会在MROM和SRAM上运行程序.
 但目前NEMU并没有MROM和SRAM, 如果我们在DiffTest的时候跳过MROM和SRAM和访问,
 将会跳过所有指令的执行, 使得DiffTest将无法起到预期的作用.
@@ -407,7 +407,7 @@ Hint: 为了完成这个任务, 你需要一些链接的知识.
 :::
 
 <!-- -->
-:::option[让NPC抛出Access Fault异常]
+:::info[让NPC抛出Access Fault异常]
 尽管这不是必须的, 我们建议你在NPC中添加Access Fault的实现.
 在系统运行发生意外导致访问了未分配的地址空间, 或者设备返回错误时,
 ysyxSoC可以通过AXI的`resp`信号传递相关的错误信息.
@@ -451,4 +451,3 @@ ysyxSoC可以通过AXI的`resp`信号传递相关的错误信息.
 测试分两步, 第一步是依次向各个内存区间写入相应数据,
 第二步是依次从各个内存区间中读出数据, 并检查是否与之前写入的数据一致.
 可分别通过8位, 16位, 32位, 64位的写入方式重复上述过程.
-
