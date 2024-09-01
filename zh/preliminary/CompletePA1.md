@@ -39,6 +39,7 @@ sidebar_position: 6
 #### flag::温馨提示
 PA1到此结束...
 :::
-[gdb]: ../../ics-pa/1.4.md
+<!-- https://github.com/oscc-web/ysyx-docs-content/issues/32 -->
+<!-- [gdb]: ../../ics-pa/1.4.md
 [expr]: ../../ics-pa/1.5.html
-[watchpoint]: ../../ics-pa/1.6.html
+[watchpoint]: ../../ics-pa/1.6.html -->

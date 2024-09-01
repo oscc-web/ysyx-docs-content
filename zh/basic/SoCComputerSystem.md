@@ -452,7 +452,7 @@ ysyxSoC可以通过AXI的`resp`信号传递相关的错误信息.
 第二步是依次从各个内存区间中读出数据, 并检查是否与之前写入的数据一致.
 可分别通过8位, 16位, 32位, 64位的写入方式重复上述过程.
 
-:::todo[通过mem-test测试内存访问]
+:::warning[通过mem-test测试内存访问]
 在`am-kernels`中编写一个新的程序`mem-test`, 完成上述内存测试功能.
 如果检查数据时发现不一致, 就通过`halt()`结束`mem-test`的运行.
 
@@ -467,7 +467,7 @@ ysyxSoC可以通过AXI的`resp`信号传递相关的错误信息.
 :::
 
 <!-- -->
-:::question[智能的链接过程]
+:::info[智能的链接过程]
 你已经在klib中实现了`printf()`, 但如果没有在`mem-test`中调用`printf()`,
 链接后的可执行文件确实不包含`printf()`的代码.
 这种智能的链接方式能够在存储器空间有限的情况下避免生成不必要的代码,
@@ -476,7 +476,7 @@ ysyxSoC可以通过AXI的`resp`信号传递相关的错误信息.
 :::
 
 <!-- -->
-:::comment[真实的内存访问测试程序]
+:::info[真实的内存访问测试程序]
 事实上, 上述测试方法并不能较为全面地测试各种访存问题.
 真实的内存测试程序通常会采用更复杂的模式来测试内存的读写, 可以覆盖多种故障,
 例如[memtest86](https://en.wikipedia.org/wiki/Memtest86).
@@ -542,7 +542,7 @@ SECTIONS {
 其中`>`后表示VMA在的存储器区间, `AT>`后表示LMA所在的存储器区间.
 上述链接脚本表示, 代码段将链接到MROM空间, 同时也位于MROM空间.
 
-:::todo[通过bootloader将数据段加载到内存]
+:::warning[通过bootloader将数据段加载到内存]
 根据上述内容, 在TRM调用`main()`函数前, 将数据段加载到SRAM, 从而支持后续代码写入全局变量.
 如果你的实现正确, 你应该能成功运行`cpu-tests`中除`hello-str`外的所有测试.
 
@@ -562,7 +562,7 @@ SECTIONS {
 支持全局变量的写入操作后, 只要MROM和SRAM能装下的可计算程序, 理论上都能运行.
 最后我们来讨论`putch()`的实现.
 
-:::todo[实现putch()]
+:::warning[实现putch()]
 仿照上文的`char-test`, 通过向UART16550写入字符, 实现`putch()`的功能.
 实现后运行`hello`程序, 如果你的实现正确, 你将看到NPC输出若干字符.
 
@@ -571,7 +571,7 @@ SECTIONS {
 :::
 
 <!-- -->
-:::todo[观察NPC输出的行为]
+:::warning[观察NPC输出的行为]
 尝试修改`hello.c`的代码, 增加或减少字符串的长度, 观察NPC输出字符串的行为.
 根据你的观察, 你猜测原因可能是什么?
 
@@ -603,7 +603,7 @@ SECTIONS {
      它表示波特率是115200, 字符长度是8位, 不带校验位, 1位停止位.
 1. 按需设置中断, 不过NPC目前不支持中断, 因此可不设置
 
-:::todo[正确实现串口的初始化]
+:::warning[正确实现串口的初始化]
 你需要在TRM中添加代码, 设置串口的除数寄存器.
 由于ysyxSoC本质上还是一个仿真环境, 没有串口接收端, 也没有电气特性的概念,
 因此目前可随意设置上述除数, 不必担心误码率的问题.
@@ -618,7 +618,7 @@ SECTIONS {
 为了解决这个问题, 我们需要在向串口写入字符之前, 保证其发送队列一定有空闲位置可以写入.
 这可以通过查询串口的状态寄存器实现: 软件可以轮询相关寄存器, 直到确保写入的字符不会丢失为止.
 
-:::todo[输出前轮询串口的状态寄存器]
+:::warning[输出前轮询串口的状态寄存器]
 你需要修改`putch()`的代码, 在输出前先查询串口发送队列的情况.
 具体如何查询, 同样地, 你可以RTFM了解UART IP的功能,
 也可以RTFSC, 结合UART16550寄存器的RTL实现, 帮助你理解相关的功能.
@@ -696,7 +696,7 @@ flash控制器检查该事务的属性, 发现是读事务, 则生成相应的�
 一段时间后, flash控制器得到从flash颗粒中读出的数据,
 便将这些数据作为总线事务的回复传送给CPU, CPU的LSU接收到读结果后, load指令继续执行.
 
-:::todo[RTFSC理解从flash中读出数据的过程]
+:::warning[RTFSC理解从flash中读出数据的过程]
 ysyxSoC包含了上述过程的代码实现, 并且将flash存储空间映射到CPU的地址空间`0x3000_0000~0x3fff_ffff`.
 你需要先在`ysyxSoC/perip/spi/rtl/spi_top_apb.v`中定义宏`FAST_FLASH`, 然后尝试结合代码理解上述过程.
 
@@ -707,7 +707,7 @@ ysyxSoC包含了上述过程的代码实现, 并且将flash存储空间映射到
 :::
 
 <!-- -->
-:::todo[从flash中读出数据]
+:::warning[从flash中读出数据]
 理解从flash中读出数据的过程后, 接下来就可以通过代码测试这一过程了:
 1. 在仿真环境中定义一个代表flash存储空间的数组
 1. 在仿真环境初始化时, 往上述数组写入若干内容
@@ -781,7 +781,7 @@ SPI驱动程序在与slave通信之前, 先设置`SS`寄存器来选择目标sla
 SPI驱动程序可以轮询SPI master的状态寄存器, 当状态标志为"忙碌"时则等待,
 直到状态标志为"空闲"为止, 此时可从接收数据寄存器中读出slave的回复.
 
-:::todo[实现基于SPI协议的位翻转模块]
+:::warning[实现基于SPI协议的位翻转模块]
 为了熟悉并测试SPI的基本流程, 我们来编写一个简单的位翻转模块bitrev.
 该模块接收一个8位的数据, 然后输出该数据的位翻转结果,
 也即, 将输入数据的第0位与第7位交换, 第1位与第6位交换...
@@ -842,7 +842,7 @@ SPI传输过程的细节较多, 你很可能需要RTFM和RTFSC帮助你理解其
 :::
 
 <!-- -->
-:::todo[通过SPI总线从flash中读出数据]
+:::warning[通过SPI总线从flash中读出数据]
 尝试编写一个AM程序, 在其中实现一个原型为`uint32_t flash_read(uint32_t addr)`的函数,
 注意这个`flash_read()`函数和上文中提到的同名的DPI-C接口函数不同.
 此处的`flash_read()`函数通过驱动SPI master, 读出flash颗粒中起始地址为`addr`的32位内容.
@@ -868,7 +868,7 @@ SPI传输过程的细节较多, 你很可能需要RTFM和RTFSC帮助你理解其
 :::
 
 <!-- -->
-:::todo[从flash中加载程序并执行]
+:::warning[从flash中加载程序并执行]
 尝试将上文提到的`char-test`程序存放到flash颗粒中,
 编写测试程序, 通过`flash_read()`将`char-test`从flash读入到SRAM的某个地址中,
 然后跳转到该地址执行`char-test`.
@@ -905,7 +905,7 @@ flash存储空间`0x3000_0000~0x3fff_ffff`都映射到
 也即, `spi_top_apb.v`模块中的APB端口能接收上述两段地址空间的请求,
 你可以通过检查APB的目标地址区分它们.
 
-:::todo[通过XIP方式访问flash]
+:::warning[通过XIP方式访问flash]
 综上所述, 实现XIP方式的大致过程如下:
 1. 检查APB请求的目标地址, 若目标地址落在SPI master的地址空间, 则正常访问并回复
 1. 若目标地址落在flash存储空间, 则进入XIP模式.
@@ -926,13 +926,13 @@ flash存储空间`0x3000_0000~0x3fff_ffff`都映射到
 :::
 
 <!-- -->
-:::todo[通过XIP方式执行flash中的程序]
+:::warning[通过XIP方式执行flash中的程序]
 将上文提到的`char-test`程序存放到flash颗粒中,
 编写测试程序, 跳转到flash中执行`char-test`.
 :::
 
 <!-- -->
-:::todo[用flash替代MROM]
+:::warning[用flash替代MROM]
 确认可以从flash中取指执行后, 我们就可以用flash完全替代MROM来存放第一个程序了.
 修改PC的复位值, 使NPC复位后从flash中取出第一条指令.
 你还需要进行一系列修改来适配这一改动, 包括...
@@ -944,19 +944,19 @@ flash存储空间`0x3000_0000~0x3fff_ffff`都映射到
 :::
 
 <!-- -->
-:::question[coremark要跑好久啊]
+:::info[coremark要跑好久啊]
 如果允许你动手, 你会如何减少coremark的运行时间呢?
 
 Hint: RTFSC
 :::
 
 <!-- -->
-:::question[尝试在flash上执行flash_read()函数]
+:::info[尝试在flash上执行flash_read()函数]
 你可能会发现错误, 请尝试分析为什么会出现这个错误.
 :::
 
 <!-- -->
-:::todo[添加学号CSR并输出学号]
+:::warning[添加学号CSR并输出学号]
 为了标识不同同学的NPC, 我们可以在CSR的标识寄存器中设置自己的学号.
 具体地, 你可以在NPC中添加如下两个CSR:
 * `mvendorid` - 从中读出`ysyx`的ASCII码, 即`0x79737978`
@@ -967,7 +967,7 @@ Hint: RTFSC
 :::
 
 <!-- -->
-:::option[通过中断等待SPI master传输完成]
+:::info[通过中断等待SPI master传输完成]
 我们刚才的XIP实现是通过轮询的方式不断查询SPI master的传输是否完成,
 事实上, SPI master还支持中断通知模式, 设置控制寄存器的`IE`位后,
 SPI master在传输结束后将会发出中断信号,
@@ -1087,7 +1087,7 @@ PSRAM控制器会将接收到的总线事务翻译成发往PSRAM颗粒的命令.
 ysyxSoC已经将PSRAM颗粒与PSRAM控制器相连, 但未提供PSRAM颗粒相关的代码,
 为了在ysyxSoC中使用PSRAM, 你还需要实现PSRAM颗粒的仿真行为模型.
 
-:::todo[实现PSRAM颗粒的仿真行为模型]
+:::warning[实现PSRAM颗粒的仿真行为模型]
 你需要实现IS66WVS4M8ALL颗粒的仿真行为模型.
 你只需要实现SPI Mode的`Qual IO Read`和`Quad IO Write`两种命令即可,
 它们的命令编码分别为`EBh`和`38h`, PSRAM控制器也只会向PSRAM颗粒发送这两种命令.
@@ -1127,7 +1127,7 @@ ysyxSoC已经将PSRAM颗粒与PSRAM控制器相连, 但未提供PSRAM颗粒相�
 如果slave支持QPI协议, 它将提供一个切换到QPI模式的命令,
 master可以发送该命令将slave切换到QPI模式, 然后使用QPI协议与其通信.
 
-:::todo[使用QPI协议访问PSRAM颗粒]
+:::warning[使用QPI协议访问PSRAM颗粒]
 尝试为PSRAM颗粒添加QPI模式以及进入QPI模式的命令, 然后修改PSRAM控制器的代码,
 使其复位后先通过电路逻辑向PSRAM颗粒发送进入QPI模式的命令,
 后续则使用QPI模式与PSRAM颗粒进行通信.
@@ -1140,7 +1140,7 @@ master可以发送该命令将slave切换到QPI模式, 然后使用QPI协议与�
 
 有了PSRAM的支持, 我们就可以尝试把数据段分配在PSRAM, 从而支持运行更大的程序.
 
-:::todo[在ysyxSoC上运行microbench]
+:::warning[在ysyxSoC上运行microbench]
 之前我们把数据段和堆区分配在8KB的SRAM中, 而运行microbench所需要的内存大于8KB,
 因此有不少子项无法运行. 将数据段和堆区分配在4MB的PSRAM后,
 你应该能看到microbench可以成功运行test规模的所有测试.
@@ -1172,7 +1172,7 @@ master可以发送该命令将slave切换到QPI模式, 然后使用QPI协议与�
 不难想到, 那就是bootloader! 也即, 我们需要扩展bootloader的功能,
 将程序的代码和数据全部加载到SRAM中, 然后跳转到SRAM执行.
 
-:::todo[完整测试PSRAM的访问]
+:::warning[完整测试PSRAM的访问]
 扩展bootloader的功能, 把`mem-test`完全加载到SRAM, 然后再执行`mem-test`.
 一些提示如下:
 1. 你还需要将只读数据段一同加载到SRAM,
@@ -1190,7 +1190,7 @@ SRAM的访问速度虽然快, 但其容量并不大, 无法存放大部分程序
 完整测试PSRAM的访问后, 我们也可以考虑让bootload将程序完全加载到PSRAM中,
 从而提升程序执行的效率.
 
-:::todo[通过bootloader将程序加载到PSRAM中执行]
+:::warning[通过bootloader将程序加载到PSRAM中执行]
 你已经通过bootloader将`mem-test`加载到SRAM中了, 因此要将程序加载到PSRAM中并不难.
 不过为了充分利用SRAM, 我们可以把栈分配在SRAM中, 来提升函数调用和访问局部变量的效率.
 
@@ -1199,7 +1199,7 @@ SRAM的访问速度虽然快, 但其容量并不大, 无法存放大部分程序
 :::
 
 <!-- -->
-:::todo[在PSRAM上执行RT-Thread]
+:::warning[在PSRAM上执行RT-Thread]
 目前PSRAM的容量已经足够运行RT-Thread了.
 尝试通过bootloader将RT-Thread加载到PSRAM中执行.
 :::
@@ -1214,7 +1214,7 @@ FSBL(first stage bootloader)和SSBL(second stage bootloader)两部分.
 然后SSBL负责将接下来需要运行的程序从flash加载到PSRAM中, 然后跳转到程序并执行.
 事实上, SSBL的代码并不大, 因此我们可以让FSBL将SSBL加载到SRAM中执行, 从而让SSBL执行得更快.
 
-:::todo[实现bootloader的二级加载过程]
+:::warning[实现bootloader的二级加载过程]
 按照上述功能实现FSBL和SSBL.
 为了得知SSBL在flash中的范围, 你可能需要将SSBL单独放在一个节中,
 具体可以参考`start.S`中的相关代码.
@@ -1280,7 +1280,7 @@ DRAM颗粒的存储阵列是一个多维结构, 从逻辑上看由若干个矩�
 还需要先将已激活的当前行的信息写回存储单元,
 这个过程称为预充电(precharge).
 
-:::comment[DRAM颗粒的物理实现]
+:::info[DRAM颗粒的物理实现]
 考虑到物理实现的限制, 走线过长会引入较大延迟.
 因此从物理实现的角度来看, DRAM颗粒的一个存储体还会进一步划分成多个子阵列(subarray).
 不过这些子阵列的结构和访问方式对颗粒外部是透明的,
@@ -1345,7 +1345,7 @@ SDRAM控制器会将接收到的总线事务翻译成发往SDRAM颗粒的命令,
 ysyxSoC已经将SDRAM颗粒与SDRAM控制器相连, 但未提供SDRAM颗粒相关的代码,
 为了在ysyxSoC中使用SDRAM, 你还需要实现SDRAM颗粒的仿真行为模型.
 
-:::todo[实现SDRAM颗粒的仿真行为模型]
+:::warning[实现SDRAM颗粒的仿真行为模型]
 你需要实现MT48LC16M16A2颗粒的仿真行为模型.
 具体地, 你需要实现SDRAM控制器会发送的命令,
 其中PRECHARGE和AUTO REFRESH命令与存储单元的电气特性相关,
@@ -1363,14 +1363,14 @@ ysyxSoC已经将SDRAM颗粒与SDRAM控制器相连, 但未提供SDRAM颗粒相�
 :::
 
 <!-- -->
-:::todo[完整测试SDRAM的访问]
+:::warning[完整测试SDRAM的访问]
 在进一步将程序加载到SDRAM中执行之前,
 我们还是先通过`mem-test`测试对上述SDRAM颗粒所有存储空间的访问.
 完成这个测试需要花费约1小时.
 :::
 
 <!-- -->
-:::todo[将程序加载到SDRAM中执行]
+:::warning[将程序加载到SDRAM中执行]
 让bootloader将程序加载到SDRAM中并执行.
 在这之后, 尝试在SDRAM上执行microbench和RT-Thread.
 :::
@@ -1428,7 +1428,7 @@ ysyxSoC已经将SDRAM颗粒与SDRAM控制器相连, 但未提供SDRAM颗粒相�
 
 [MTA9ASF51272PZ manual]: https://www.micron.com/-/media/client/global/documents/products/data-sheet/modules/parity_rdimm/asf9c512x72pz.pdf
 
-:::todo[将SDRAM控制器的数据位宽扩展到32位]
+:::warning[将SDRAM控制器的数据位宽扩展到32位]
 实例化2个SDRAM颗粒的子模块, 模拟对2个SDRAM颗粒进行位扩展的场景.
 为此, 你需要修改以下内容:
 * SDRAM总线接口中部分信号的位宽
@@ -1453,7 +1453,7 @@ ysyxSoC已经将SDRAM颗粒与SDRAM控制器相连, 但未提供SDRAM颗粒相�
 引脚数量的增长与存储容量呈对数关系, 和位扩展相比开销并不大.
 但从直觉上看, 字扩展不能直接提升访存带宽, 我们会在后面章节中继续讨论这个问题.
 
-:::todo[对SDRAM控制器进行字扩展]
+:::warning[对SDRAM控制器进行字扩展]
 实例化总计4个SDRAM颗粒的子模块, 其中两对SDRAM颗粒之间进行位扩展,
 再对位扩展之后的结果进行字扩展. 你还需要修改SDRAM总线接口和控制器的内部实现.
 
@@ -1513,7 +1513,7 @@ git pull origin master
 :::
 
 <!-- -->
-:::todo[通过程序实现NVBoard上的流水灯效果]
+:::warning[通过程序实现NVBoard上的流水灯效果]
 你需要进行以下工作:
 1. 在GPIO控制器中实现用于驱动LED灯的寄存器.
    具体地, 如果你选择Verilog, 你需要在`ysyxSoC/perip/gpio/gpio_top_apb.v`中实现相应代码;
@@ -1527,7 +1527,7 @@ git pull origin master
 :::
 
 <!-- -->
-:::todo[通过程序读入拨码开关的状态]
+:::warning[通过程序读入拨码开关的状态]
 与LED灯类似, 让程序读出读出拨码开关的状态.
 你可以在程序中设置一个16位二进制的密码,
 程序一开始启动时将不断查询拨码开关的状态,
@@ -1535,7 +1535,7 @@ git pull origin master
 :::
 
 <!-- -->
-:::todo[通过程序在7段数码管上展示学号]
+:::warning[通过程序在7段数码管上展示学号]
 在学号CSR中读出学号, 并将其转化成8个十六进制数, 分别用于驱动8个7段数码管.
 :::
 
@@ -1554,7 +1554,7 @@ NVBoard中的这个除数不支持运行时配置, 但可以通过修改代码�
 1. 修改`divisor`成员的初值
 1. 调用`set_divisor()`函数来设置
 
-:::todo[将串口的TX引脚接入NVBoard]
+:::warning[将串口的TX引脚接入NVBoard]
 你只需要修改NVBoard约束文件, 即可将串口的TX引脚绑定到NVBoard的串口终端上.
 关于如何绑定, 你可以参考NVBoard提供的示例.
 由于串口控制器已经接入ysyxSoC了, 你无需再修改RTL代码.
@@ -1583,7 +1583,7 @@ git pull origin master
 :::
 
 <!-- -->
-:::todo[通过NVBoard测试串口的输入功能]
+:::warning[通过NVBoard测试串口的输入功能]
 绑定串口的RX引脚并在IOE中添加上述抽象寄存器后, 运行`am-tests`中的按键测试,
 测试其能否通过UART的RX端口获得按键信息.
 
@@ -1610,7 +1610,7 @@ make init
 :::
 
 <!-- -->
-:::todo[通过串口在RT-Thread中键入命令]
+:::warning[通过串口在RT-Thread中键入命令]
 为此, 我们需要让RT-Thread调用刚才实现的IOE功能.
 修改BSP中的串口输入功能, 使其在读完内置字符串后, 通过IOE从UART RX中获取字符.
 :::
@@ -1627,7 +1627,7 @@ ysyxSoC集成了一个APB总线接口的PS2键盘控制器, 并将其映射到CP
 | `0x0` | 8位数据, 读出键盘扫描码, 如无按键信息, 则读出`0` |
 | 其他  | 保留                                 |
 
-:::todo[让riscv32e-ysyxSoC从NVBoard读取键盘按键]
+:::warning[让riscv32e-ysyxSoC从NVBoard读取键盘按键]
 你需要进行以下工作:
 1. 实现PS2键盘控制器.
    如果你选择Verilog, 你需要在`ysyxSoC/perip/ps2/ps2_top_apb.v`中实现相应代码;
@@ -1652,14 +1652,14 @@ ysyxSoC集成了一个APB总线接口的VGA控制器, 并将其映射到CPU的�
 NVBoard提供的VGA屏幕分辨率是`640x480`.
 不过ysyxSoC没有提供VGA控制器内部的具体实现, 你需要实现它.
 
-:::todo[复习VGA的工作原理]
+:::warning[复习VGA的工作原理]
 如果你在预学习阶段的数字电路实验中没有接触过VGA的相关内容,
 我们建议你先完成[相关的实验内容](https://nju-projectn.github.io/dlco-lecture-note/exp/08.html),
 从而理解VGA的工作原理, 否则你可能会在设计VGA控制器的时候遇到困难.
 :::
 
 <!-- -->
-:::todo[让riscv32e-ysyxSoC将像素信息输出到NVBoard]
+:::warning[让riscv32e-ysyxSoC将像素信息输出到NVBoard]
 你需要进行以下工作:
 1. 实现VGA控制器, 它将不断地将帧缓冲的内容通过VGA的物理接口输出到屏幕上.
    如果你选择Verilog, 你需要在`ysyxSoC/perip/vga/vga_top_apb.v`中实现相应代码;
@@ -1677,7 +1677,7 @@ NVBoard提供的VGA屏幕分辨率是`640x480`.
 :::
 
 <!-- -->
-:::question[更实际的帧缓冲实现方案]
+:::info[更实际的帧缓冲实现方案]
 通常, 帧缓冲一般是在内存中分配, 通过配置VGA控制器中的部分寄存器,
 可以让VGA控制器从内存中读取像素信息.
 
@@ -1685,7 +1685,7 @@ NVBoard提供的VGA屏幕分辨率是`640x480`.
 :::
 
 <!-- -->
-:::todo[通过NVBoard展示游戏]
+:::warning[通过NVBoard展示游戏]
 尝试在NVBoard上运行打字游戏和超级玛丽等游戏.
 当然, 这应该会非常卡, 我们后续的工作就是在微结构层次优化系统的性能.
 :::
@@ -1715,7 +1715,7 @@ git pull origin master
 :::
 
 <!-- -->
-:::todo[通过RT-Thread运行其他AM程序]
+:::warning[通过RT-Thread运行其他AM程序]
 参考PA4阶段1中的选做任务"在RT-Thread上运行AM程序",
 尝试在`riscv32e-ysyxsoc`中通过RT-Thread启动超级玛丽等其他AM程序.
 :::
@@ -1780,7 +1780,7 @@ ysyxSoC将这段空间映射到CPU的地址空间`0xc000_0000~0xffff_ffff`.
 也即, 我们可以充分利用FPGA的可编程性,
 通过更新FPGA的比特流文件, 将不同的设备接入到这段地址空间中.
 
-:::todo[通过ChipLink访问对端芯片的资源]
+:::warning[通过ChipLink访问对端芯片的资源]
 ysyxSoC默认未打开ChipLink, 因此你需要在`ysyxSoC/src/SoC.scala`的`Config`对象中
 将`hasChipLink`变量修改为`true`, 重新生成`ysySoCFull.v`并仿真即可.
 
