@@ -5,7 +5,7 @@ There are two goals in the Baseline stage
 * Running the NES game Super Mario on a processor designed by yourself
 * Understand in depth how Super Mario runs on the processor you designed
 
-![image](./mario.png)
+![image](/ysyx-img/zh/basic/mario.png)
 
 Specifically, the tasks in the Baseline stage can be divided into the following parts:
 1. Build infrastructures. Infrastructures are tools and methods that help improve debugging efficiency.

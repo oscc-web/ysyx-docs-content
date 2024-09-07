@@ -9,8 +9,10 @@ sidebar_position: 2
 [pa0]: /ics-pa/PA0.html -->
 
 :::warning[Install a Linux operating system]
-We're going to reuse the contents of the PA handout, and we're going to ask you to follow [PA0](/docs/en/ics-pa/PA0.html) to install Linux OS.
+We're going to reuse the contents of the PA handout, and we're going to ask you to follow PA0 to install Linux OS.
 :::
+
+<!-- [PA0](/docs/en/ics-pa/PA0.html) -->
 
 <!-- > #### todo:: 获取"一生一芯"框架代码
 > 当你阅读PA0讲义, 并进行到获取PA框架代码的部分, 将会有提示框请你返回到此处的讲义内容.

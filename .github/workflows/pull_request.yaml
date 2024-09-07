@@ -46,5 +46,5 @@ jobs:
     - name: Test doc building
       working-directory: ysyx-docs
       run: |
-        python3 ./pull_content.py --local ${{ github.workspace }}/ysyx-docs-content --map zh:docs --map en:i18n/en/docusaurus-plugin-content-docs/current
+        python3 ./pull_content.py --local ${{ github.workspace }}/ysyx-docs-content --map zh:docs --map en:i18n/en/docusaurus-plugin-content-docs/current --map ysyx-img:static/ysyx-img/
         npm run build

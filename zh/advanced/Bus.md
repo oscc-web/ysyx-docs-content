@@ -1,7 +1,7 @@
 ---
 sidebar_position: 4
 ---
-## 总线
+# 总线
 
 :::info[视频录播和课件]
 * 录播 - [总线选讲](https://www.bilibili.com/video/BV1wP4y1q7fF/)
