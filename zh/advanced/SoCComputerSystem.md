@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 ---
-## SoC计算机系统
+# SoC计算机系统
 
 :::info[视频录播和课件]
 * 录播 - [SoC计算机系统](https://www.bilibili.com/video/BV1ZK41117MB/)
@@ -21,7 +21,7 @@ System on a Chip (SoC)，即系统级芯片或片上系统。
 操作系统和硬件系统之间的界面是指令系统ISA (Instruction Set Architecture);
 硬件系统和晶体管之间的界面是工艺模型。
 
-![img](./SoC/1.jpg)
+![img](/ysyx-img/zh/advanced/SoC/1.jpg)
 :::
 :::warning[了解API和ABI的区别]
 
@@ -29,7 +29,7 @@ System on a Chip (SoC)，即系统级芯片或片上系统。
 刚刚我们已经介绍过SoC的基本概念，但似乎依然缺乏对于SoC和CPU的直观理解。
 我们可以尝试从冯·诺依曼结构入手，进一步展开SoC的细节。
 
-![img](./SoC/2.jpg)
+![img](/ysyx-img/zh/advanced/SoC/2.jpg)
 
 简要来说，计算机由存储器、运算器、控制器、输入设备和输出设备五部分组成，
 其中运算器和控制器合称为中央处理器 (Central Processing Processor)，也就是CPU。
@@ -53,7 +53,7 @@ System on a Chip (SoC)，即系统级芯片或片上系统。
 计算机的各个部件根据速度快慢以及与处理器交换数据的频繁程度被安排在北桥和南桥中，CPU通过处理器总线和北桥直接相连，北桥再通过南北桥总线和南桥相连。
 GPU一般以显卡的形式连接北桥，内存控制器集成在北桥芯片中；硬盘接口、音频接口以及鼠标、键盘等接口放在南桥芯片中。
 
-![img](./SoC/3.jpg)
+![img](/ysyx-img/zh/advanced/SoC/3.jpg)
 
 ### CPU‑北桥‑南桥三片结构
 现代计算机的一种典型结构是CPU‑北桥‑南桥结构。
@@ -64,7 +64,7 @@ GPU一般以显卡的形式连接北桥，内存控制器集成在北桥芯片�
 内存控制器、显示功能以及高速IO接口（如PCIE等）集成在北桥芯片中；硬盘接口、音频接口以及鼠标、键盘等接口仍旧放在南桥芯片中。
 随着计算机技术的发展，更多的高速接口被引入计算机体系结构中，在北桥上集成的IO接口的速率也不断提升。
 
-![img](./SoC/4.jpg)
+![img](/ysyx-img/zh/advanced/SoC/4.jpg)
 
 ### CPU‑弱北桥‑南桥三片结构
 随着芯片的集成度不断提高，单一芯片中能够实现的功能越来越复杂。
@@ -74,7 +74,7 @@ GPU一般以显卡的形式连接北桥，内存控制器集成在北桥芯片�
 因此，对计算机系统性能影响显著的内存控制器开始被集成到CPU芯片中，从而大幅降低了内存访问延迟，提升了内存访问带宽。
 于是，北桥的功能被弱化，主要集成了GPU、显示接口、高速IO接口（如PCIE等）。
 
-![img](./SoC/5.jpg)
+![img](/ysyx-img/zh/advanced/SoC/5.jpg)
 
 ### CPU‑南桥两片结构
 随着芯片集成度的进一步提高，图形处理器也开始被集成到CPU芯片中。
@@ -84,7 +84,7 @@ GPU一般以显卡的形式连接北桥，内存控制器集成在北桥芯片�
 南桥芯片则包含硬盘、USB、网络控制器以及PCIE/PCI、LPC等总线接口。
 当然，也有一些两片结构是将GPU集成在南桥芯片中，这样在南桥上可以实现独立的显存供GPU使用，某些条件下更有利于GPU性能的发挥。
 
-![img](./SoC/6.jpg)
+![img](/ysyx-img/zh/advanced/SoC/6.jpg)
 
 ### SoC单片结构
 
@@ -92,14 +92,14 @@ SoC是一种单片计算机系统解决方案，在单个芯片上集成了处�
 目前SoC主要应用于移动处理器和工业控制领域，相比于多片结构，单片SoC的集成度更高，功耗控制方法更加灵活，有利于系统的小型化和低功耗设计。
 不过，由于全系统都在一个芯片上实现，系统的扩展性没有多片结构好，升级的开销也更大。
 
-![img](./SoC/7.jpg)
+![img](/ysyx-img/zh/advanced/SoC/7.jpg)
 
 目前，主流商用处理器中，面向中高端领域的处理器普遍采用两片结构，而面向中低端及嵌入式领域的处理器普遍采用单片结构。
 SoC单片结构最常见的是在手机等移动设备中，例如Apple M1 Chip。
 
-![img](./SoC/8.jpg)
+![img](/ysyx-img/zh/advanced/SoC/8.jpg)
 
-![img](./SoC/9.jpg)
+![img](/ysyx-img/zh/advanced/SoC/9.jpg)
 
 ## 一生一芯SoC介绍]
 :::info[一生一芯SoC资料]
@@ -108,27 +108,27 @@ SoC单片结构最常见的是在手机等移动设备中，例如Apple M1 Chip�
 
 一生一芯的SoC系统中包括了处理器核，CPU选择模块、UART、SPI、VGA、SDRAM、PS2、ETHMAC和Chiplink等外设。
 
-![img](./SoC/10.jpg)
+![img](/ysyx-img/zh/advanced/SoC/10.jpg)
 
 ### PCB板
 PCB 板分为上下两层，分别为SoC板和FPGA板，上下板之间通过Chiplink连接。
 
 SoC板包括SoC芯片、晶振、8位拨码开关等元件。
 
-![img](./SoC/11.jpg)
+![img](/ysyx-img/zh/advanced/SoC/11.jpg)
 
 出于成本的考量，多个同学的CPU会被集成到一块SoC上，根据拨码开关指定选择信号`core_dip`，在实际芯片中选择其中一个CPU运行。
 
-![img](./SoC/13.jpg)
+![img](/ysyx-img/zh/advanced/SoC/13.jpg)
 
 晶振为各种外设提供25MHZ的时钟。
 为将低频的晶振时钟倍频到更高的频率输入给CPU使用，处理器集成了PLL（锁相环）模块，上电时通过不同的`pll_cfg`选择CPU使用的频率。
 
-![img](./SoC/14.jpg)
+![img](/ysyx-img/zh/advanced/SoC/14.jpg)
 
 FPGA板包括ZYNQ芯片、DDR等元件。
 
-![img](./SoC/12.jpg)
+![img](/ysyx-img/zh/advanced/SoC/12.jpg)
 
 ### 外设介绍
 * [UART N16550](http://byterunner.com/16550.html)：十分常见的UART IP，在软件上易于配置和使用，可以灵活地配置例如波特率、FIFO、中断等功能。
@@ -145,7 +145,7 @@ FPGA板包括ZYNQ芯片、DDR等元件。
 Chiplink易于验证，可以在保证正确性的前提下提供丰富的外设。
 不过，尽管Chiplink有sifive的开源实现，但没有文档；同时Chiplink的带宽很低。
 
-![img](./SoC/15.jpg)
+![img](/ysyx-img/zh/advanced/SoC/15.jpg)
 
 ### 仿真测试
 SoC团队通过VCS和Verdi对集成后的SoC进行测试，其中VCS用于仿真，Verdi用于调试。
@@ -153,14 +153,14 @@ SoC团队通过VCS和Verdi对集成后的SoC进行测试，其中VCS用于仿真
 在VCS仿真测试框架中，`asic_top`为设计和流片的顶层，即PCB板上的SoC芯片，同时测试框架中还包含了一些其他仿真模块。
 在进行仿真测试时，程序被加载进Flash和RAM中。
 
-![img](./SoC/16.jpg)
+![img](/ysyx-img/zh/advanced/SoC/16.jpg)
 
 SoC团队采用三种类型的仿真测试。
 * RTL仿真：在RTL级别对设计进行仿真，验证设计的功能正确性
 * 网表仿真：对综合后的网表进行仿真，验证功能正确性。
 * 带时序信息的网表仿真：将时序信息反标到网表上进行仿真，验证设计的时序与功能正确性。
 
-![img](./SoC/17.jpg)
+![img](/ysyx-img/zh/advanced/SoC/17.jpg)
 
 ## 一生一芯后端概述
 后端设计一般指芯片设计中从网表或RTL代码生成到可生产制造的GDS的设计过程。主要包括综合、形式化验证、布局与布线、以及Signoff阶段的静态时序分析、物理验证等阶段。

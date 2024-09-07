@@ -1,7 +1,7 @@
 ---
 sidebar_position: 8
 ---
-## 乘除法功能单元
+# 乘除法功能单元
 
 :::info[视频录播和课件]
 * 录播 - [功能单元设计](https://www.bilibili.com/video/BV1ET411m7cZ/)
@@ -265,7 +265,7 @@ assign sel_double_positive = ~y_add &  y &  y_sub;
 2. 将乘数的最低 3bits 和被乘数的 68bits 输入到部分积生成模块，把部分积生成模块生成的数与结果用 68bits 加法器相加，并把和暂存到结果寄存器中，并把乘数右移两位，把被乘数左移两位。
 3. 重复上面的步骤，直至 34bits 的乘数全部为零。
 
-![image](./Cache/2.8_booth.png)
+![image](/ysyx-img/zh/advanced/Cache/2.8_booth.png)
 
 注意:由于两位 booth 每次需要扫描三位乘数，此时不能只扩展一位符号位，只能扩展两位符号位。
 
@@ -290,7 +290,7 @@ assign sel_double_positive = ~y_add &  y &  y_sub;
 
 17bits 华莱士树共有6层，使用了15个全加器。
 
-![image](./Cache/2.8_walloc_tree.png)
+![image](/ysyx-img/zh/advanced/Cache/2.8_walloc_tree.png)
 
 ```verilog
 //一位全加器
@@ -369,7 +369,7 @@ endmodule
 
 下面是 32 bits walloc X booth的示意图
 
-![image](./Cache/2.8_walloc_X_booth.png)
+![image](/ysyx-img/zh/advanced/Cache/2.8_walloc_X_booth.png)
 
 #### 时序问题
 
@@ -450,7 +450,7 @@ A: 如果你写的是 test bench的话，可以就像在C语言中直接用使�
 
 #### 除法器模块在流水线中的位置
 
-![](./Cache/2.8_div_module.png)
+![image](/ysyx-img/zh/advanced/Cache/2.8_div_module.png)
 
 #### ALU中增加的信号
 

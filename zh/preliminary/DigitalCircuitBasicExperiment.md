@@ -37,7 +37,7 @@ sidebar_position: 5
 你只需要把编译出的verilog代码接入verilator和NVBoard就可以了.
 
 欢迎加入Chisel交流群（微信扫描下方二维码联系助教进群）
-![Wang Rui](./wangrui.jpg)
+![Wang Rui](/ysyx-img/zh/preliminary/wangrui.jpg)
 :::
 [bootcamp]: https://mybinder.org/v2/gh/freechipsproject/chisel-bootcamp/master
 [users guide]: https://www.chisel-lang.org/docs

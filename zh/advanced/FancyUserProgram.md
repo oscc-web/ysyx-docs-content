@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 ---
-## 精彩纷呈的用户程序
+# 精彩纷呈的用户程序
 
 本节需要更多的[RTFM](https://www.libsdl.org/release/SDL-1.2.15/docs/)来学习多媒体库的使用，当你足够熟练的时候，也许你也能写出[NVBOARD](https://github.com/NJU-ProjectN/nvboard)。同时需要现更多功能来支持Navy中的应用程序，运行仙剑奇侠传。南京大学的操作系统课程实现了一些基于AM的[小游戏](https://github.com/NJU-ProjectN/oslab0-collection), 尝试在NAVY上运行。
 

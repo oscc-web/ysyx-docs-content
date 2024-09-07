@@ -1,7 +1,7 @@
 ---
 sidebar_position: 7
 ---
-## Cache简介
+# Cache简介
 
 :::info[视频录播和课件]
 * 录播 - [性能和缓存](https://www.bilibili.com/video/BV1FY41127tA/)
@@ -12,21 +12,21 @@ Cache指的是高速缓存简称缓存，原始意义是指访问速度比一般
 在CPU中，Cache是介于内存和处理器之间的缓存，用于存放CPU即将可能使用的数据，当CPU要使用的数据在Cache中取到时，便不再需要到内存去存取数据，从而减少处理器访问内存的次数。
 提供“缓存”的目的是为了让数据访问的速度适应CPU的处理速度，由于CPU的运行速度远快于存储器的存储速度，当处理器通过内存存取一次数据将耗费数十个时钟周期，而处理器访问Cache则只需要一个或者几个时钟周期，所以Cache的出现极大的减小了CPU运行速度和存储速度的差距。设想一下一个主频2GHz的4-way超标量处理器访问一个100ns的DRAM, 在访问一次DRAM时间内，处理器内部可以执行800条指令，这是不可以接受的，所以就有了和处理器一样工艺制造的L1Cache，紧密耦合在处理器内，得以让处理器能够直接访问Cache得到数据。虽然Cache能极大的提升处理器的性能，但是在一块芯片中，Cache的容量大小一般只有1KB到32KB，而这相较于内存存储的几个GB甚至TB的数据来说，Cache的容量是微乎其微的,Cache只能缓存内存的一小部分数据，但是Cache依然能够让处理器取到大部分需要的数据，其中的原理是内存中“程序执行与数据访问的局域性行为”，即一定程序执行时间和空间内，被访问的代码集中于一部分，所以Cache中缓存的数据都是被近期访问过数据或者可能会被访问的数据，这样就使得Cache的命中率大大提高。
 
-![image](./Cache/fig.2.png)
+![image](/ysyx-img/zh/advanced/Cache/fig.2.png)
 
 前面提到的Cache，称之为L1 Cache（第一级Cache）。我们在L1 Cache后面连接L2 Cache，在L2 Cache和主存之间连接L3 Cache。等级越高，速度越慢，容量越大。但是速度相比较主存而言，依然很快，但是本次一生一芯只需要完成L1Cache，且提供的大小暂定为8K，同时为了减小面积和改善后端物理设计结果，需要替换RAM。关于SoC对接要求请查看[第四期一生一芯计划仿真用SoC工程](https://github.com/OSCPU/ysyxSoC)，在CheckList中会提到共享RAM的规格，其具体原语句可在这里查看[带写掩码的单口RAM模型](https://github.com/OSCPU/ysyxSoC/blob/ysyx4/ysyx/ram/S011HD1P_X32Y2D128_BW.v)
 ## 直接映射缓存(Direct mapped cache)
 我们继续引入一些cache相关的名词。cache的大小称之为cache size，代表cache可以缓存最大数据的大小。我们将cache平均分成相等的很多块，每一个块大小称之为cache line，其大小是cache line size。例如一个64 Bytes大小的cache。如果我们将64 Bytes平均分成64块，那么cache line就是1字节，总共64行cache line。如果我们将64 Bytes平均分成8块，那么cache line就是8字节，总共8行cache line。现在的硬件设计中，一般cache line的大小是4-128 Bytes。为什么没有1 byte呢？原因我们后面讨论。
 我们假设下面的讲解都是针对64 Bytes大小的cache，并且cache line大小是8字节。我们可以类似把这块cache想想成一个数组，数组总共8个元素，每个元素大小是8字节。
 
-![image](./Cache/fig.1.png)
+![image](/ysyx-img/zh/advanced/Cache/fig.1.png)
 
 
 现在我们考虑一个问题，CPU从0x0654地址读取一个字节，cache控制器是如何判断数据是否在cache中命中呢？cache大小相对于主存来说，可谓是小巫见大巫。所以cache肯定是只能缓存主存中极小一部分数据。我们如何根据地址在有限大小的cache中查找数据呢？现在硬件采取的做法是对地址进行散列（可以理解成地址取模操作）。我们接下来看看是如何做到的？
 
 
 
-![image](./Cache/fig.3.png)
+![image](/ysyx-img/zh/advanced/Cache/fig.3.png)
 
 我们一共有8行cache line，cache line大小是8 Bytes。所以我们可以利用地址低3 bits（如上图地址红色部分）用来寻址8 bytes中某一字节，我们称这部分bit组合为offset。同理，8行cache line，为了覆盖所有行。我们需要3 bits（如上图地址蓝色部分）查找某一行，这部分地址部分称之为index。现在我们知道，如果两个不同的地址，其地址的bit3-bit5如果完全一样的话，那么这两个地址经过硬件散列之后都会找到同一个cache line。所以，当我们找到cache line之后，只代表我们访问的地址对应的数据可能存在这个cache line中，但是也有可能是其他地址对应的数据。所以，我们又引入tag array区域，tag array和data array一一对应。每一个cache line都对应唯一一个tag，tag中保存的是整个地址位宽去除index和offset使用的bit剩余部分（如上图地址绿色部分）。tag和index、offset三者组合就可以唯一确定一个地址了。因此，当我们根据地址中index位找到cache line后，取出当前cache line对应的tag，然后和地址中的tag进行比较，如果相等，这说明cache命中。如果不相等，说明当前cache line存储的是其他地址的数据，这就是cache缺失。在上述图中，我们看到tag的值是0x19，和地址中的tag部分相等，因此在本次访问会命中。由于tag的引入，因此解答了我们之前的一个疑问“为什么硬件cache line不做成一个字节？”。这样会导致硬件成本的上升，因为原本8个字节对应一个tag，现在需要8个tag，占用了很多内存。tag也是cache的一部分，但是我们谈到cache size的时候并不考虑tag占用的内存部分，我们在一生一芯中的tag是用寄存器reg来实现的。
 
@@ -38,14 +38,14 @@ Cache指的是高速缓存简称缓存，原始意义是指访问速度比一般
 直接映射缓存在硬件设计上会更加简单，因此成本上也会较低。根据直接映射缓存的工作方式，我们可以画出主存地址0x00-0x88地址对应的cache分布图。
 
 
-![image](./Cache/fig.4.png)
+![image](/ysyx-img/zh/advanced/Cache/fig.4.png)
 
 
 我们可以看到，地址0x00-0x3f地址处对应的数据可以覆盖整个cache。0x40-0x7f地址的数据也同样是覆盖整个cache。我们现在思考一个问题，如果一个程序试图依次访问地址0x00、0x40、0x80，cache中的数据会发生什么呢？首先我们应该明白0x00、0x40、0x80地址中index部分是一样的。因此，这3个地址对应的cache line是同一个。所以，当我们访问0x00地址时，cache会缺失，然后数据会从主存中加载到cache中第0行cache line。当我们访问0x40地址时，依然索引到cache中第0行cache line，由于此时cache line中存储的是地址0x00地址对应的数据，所以此时依然会cache缺失。然后从主存中加载0x40地址数据到第一行cache line中。同理，继续访问0x80地址，依然会cache缺失。这就相当于每次访问数据都要从主存中读取，所以cache的存在并没有对性能有什么提升。访问0x40地址时，就会把0x00地址缓存的数据替换。这种现象叫做cache颠簸（cache thrashing）。针对这个问题，我们引入多路组相连缓存。我们首先研究下最简单的两路组相连缓存的工作原理。
 ## 两路组相连缓存(Two-way set associative cache)
 我们依然假设64 Bytes cache size，cache line size是8 Bytes。什么是路（way）的概念。我们将cache平均分成多份，每一份就是一路。因此，两路组相连缓存就是将cache平均分成2份，每份32 Bytes。如下图所示。
 
-![image](./Cache/fig.5.png)
+![image](/ysyx-img/zh/advanced/Cache/fig.5.png)
 
 
 cache被分成2路，每路包含4行cache line。我们将所有索引一样的cache line组合在一起称之为组。例如，上图中一个组有两个cache line，总共4个组。我们依然假设从地址0x0654地址读取一个字节数据。由于cache line size是8 Bytes，因此offset需要3 bits，这和之前直接映射缓存一样。不一样的地方是index，在两路组相连缓存中，index只需要2 bits，因为一路只有4行cache line。上面的例子根据index找到第2行cache line（从0开始计算），第2行对应2个cache line，分别对应way 0和way 1。因此index也可以称作set index（组索引）。先根据index找到set，然后将组内的所有cache line对应的tag取出来和地址中的tag部分对比，如果其中一个相等就意味着命中。
@@ -53,7 +53,7 @@ cache被分成2路，每路包含4行cache line。我们将所有索引一样的
 两路组相连缓存优缺点
 两路组相连缓存的硬件成本相对于直接映射缓存更高。因为其每次比较tag的时候需要比较多个cache line对应的tag（某些硬件可能还会做并行比较，增加比较速度，这就增加了硬件设计复杂度）。为什么我们还需要两路组相连缓存呢？因为其可以有助于降低cache颠簸可能性。那么是如何降低的呢？根据两路组相连缓存的工作方式，我们可以画出主存地址0x00-0x4f地址对应的cache分布图。
 
-![image](./Cache/fig.6.png)
+![image](/ysyx-img/zh/advanced/Cache/fig.6.png)
 
 
 我们依然考虑直接映射缓存一节的问题“如果一个程序试图依次访问地址0x00、0x40、0x80，cache中的数据会发生什么呢？”。现在0x00地址的数据可以被加载到way 1，0x40可以被加载到way 0。这样是不是就在一定程度上避免了直接映射缓存的尴尬境地呢？在两路组相连缓存的情况下，0x00和0x40地址的数据都缓存在cache中。试想一下，如果我们是4路组相连缓存，后面继续访问0x80，也可能被被缓存。
@@ -83,10 +83,10 @@ cache更新策略是指当发生cache命中时，写操作应该如何更新数�
 
 下面我们来梳理一次数据是否命中对应的状态转化，当你的CPU发出一次读请求应该首先到Cache中进行数据读。根据读地址，你应该会通过index寻找到对应的tag和cache line，然后进行tag比对。如果tag相同则表示Cache命中（hit），那么直接将数据读回CPU。如果未命中，则说明Cache中并未缓存对应地址的数据，就必须通过总线（如果未实现可以通过DPI-C访问数组）去完成数据的读写，一般来说访问总线的延迟是不固定的，这个时候你必须暂停你的CPU。当读数据从总线返回时，先将读取的数据写入Cache中并更新tag内容，使Cache能够转入hit状态，然后将数据从Cache中读出发给CPU，并让CPU继续运行。这样就完成一次数据读取操作。其中控制CPU暂停和运行的信号由tag比对的结果决定，所以你需要完成一个Cache的状态机，你可以尝试构建你自己Cache的读写状态。对于初学者，建议先完成I-Cache（指令cache），再实现D-Cache（数据cache），即先完成读逻辑，再补充写逻辑。对于较为熟练的同学，可以直接实现D-Cache，然后屏蔽D-Cache的写端口实现I-Cache。下面是命中判断和状态转化的示意图：
 
-![image](./Cache/fig.7.png)
+![image](/ysyx-img/zh/advanced/Cache/fig.7.png)
 
 
-![image](./Cache/fig.8.png)
+![image](/ysyx-img/zh/advanced/Cache/fig.8.png)
 :::
 ## fence.i 指令
   对于完成Cache的同学可以查看一生一芯SOC四期规范理解第一个程序加载过程，然后保持Cache一致性，来实现fence.i指令，当然这是后续接入SOC才需要实现，你也可以到最后在实现它。(助教提醒：思考一下你流水线里的访存指令是否需要冲刷)
